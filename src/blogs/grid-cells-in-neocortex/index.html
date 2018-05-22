@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Grid Cells in the Neocortex</title>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../../../docs/bhtms-path-integration-0.2.2.js"></script>
+
+    <style>
+        .widget {
+            width: 560px;
+            border: 1px black;
+            margin: 20px 0;
+        }
+        svg.environment {
+            padding: 20px;
+            margin: 10px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<h1>Grid Cells in the Neocortex</h1>
+
+<div class="widget">
+
+    <div id="pathIntegration"></div>
+
+    <script>
+        $(function() {
+             BHTMS.pathIntegration("pathIntegration")
+        });
+    </script>
+
+</div>
+
+</body>
+
+</html>

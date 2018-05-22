@@ -135,4 +135,34 @@ modules.push({
     }
 })
 
+// For Grid Cells in the Neocortex
+modules.push({
+    mode: mode,
+    entry: [
+        "./src/blogs/grid-cells-in-neocortex/index.js",
+    ],
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                loader: "babel-loader"
+            },
+            {
+                test: /tmpl\.html$/,
+                loader: "posthtml-loader"
+            }
+        ]
+    },
+    resolve: {
+        alias: {
+            JSDS: path.join(__dirname, "node_modules/javascript-data-store/src/jsds"),
+            HexagonGridCellModule: path.join(__dirname, "src/gridCells/hex-gcm"),
+        }
+    },
+    output: {
+        path: __dirname + "/docs",
+        filename: `bhtms-path-integration-${version}.js`
+    }
+})
+
 module.exports = modules
