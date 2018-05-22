@@ -4,8 +4,8 @@ let JSDS = require('JSDS')
 
 let jsds = JSDS.create('pathIntegration')
 
-let environments = 4
-let featureCount = 10
+let environments = 2
+let featureCount = 4
 let width = 420
 let height = 300
 let gridSpacing = 20
@@ -68,12 +68,13 @@ function createGrid($svg) {
 function createFeatures($svgs, features) {
     features.forEach((f, envIndex) => {
         let $svg = d3.select($svgs.nodes()[envIndex])
-        $svg.selectAll('circle').data(features[envIndex])
+        let envFeatures = features[envIndex]
+        $svg.selectAll('circle').data(envFeatures)
             .enter().append('circle')
             .attr('cx', d => d.x).attr('cy', d => d.y)
             .attr('r', 3)
             .attr('fill', 'black')
-        $svg.selectAll('text').data(features[envIndex])
+        $svg.selectAll('text').data(envFeatures)
             .enter().append('text')
             .attr('x', d => d.x).attr('y', d => d.y)
             .attr('class', d => d.type)
@@ -82,6 +83,21 @@ function createFeatures($svgs, features) {
             .attr('font-size', '16pt')
             .attr('stroke', 'none')
             .text(d => d.type)
+        // Also create movements between all the features
+        let movements = {}
+        envFeatures.forEach((fromFeature, fromIndex) => {
+            envFeatures.forEach((toFeature, toIndex) => {
+                if (fromIndex === toIndex) return
+                if (! movements[fromFeature.type]) {
+                    movements[fromFeature.type] = []
+                }
+                movements[fromFeature.type].push({
+                    fromFeature: fromFeature, fromIndex: fromIndex,
+                    toFeature: toFeature, toIndex: toIndex,
+                })
+            })
+        })
+        jsds.set('movements', movements)
     })
 }
 
@@ -96,9 +112,9 @@ function selectFeature(feature) {
 }
 
 function getFeaturesAtLocation(env, x, y) {
-    let out = [],
-        featureMap = jsds.get('features') || []
-    featureMap.forEach((features) => {
+    let out = []
+    let featureByEnv = jsds.get('features') || []
+    featureByEnv.forEach((features) => {
         features.forEach(f => {
             if (f.env === env && f.x === x && f.y === y) out.push(f)
         })
@@ -111,16 +127,20 @@ function updateDisplay() {
     let loc = jsds.get('location')
     if (loc) {
         let features = getFeaturesAtLocation(loc.environment, loc.x, loc.y)
-        features.forEach(f => {
-            let locations = featureMap[f.type]
-            // let entry = [f.x, f.y].join(',')
-            if (! locations) locations = new Set([f])
-            if (! locations.has(f)) {
-                locations.add(f)
-            }
-            featureMap[f.type] = locations
-        })
-        selectFeature(features[0])
+        if (features.length) {
+            let movements = jsds.get('movements')
+            console.log(movements[features[0].type])
+            // features.forEach(f => {
+            //     let locations = featureMap[f.type]
+            //     // let entry = [f.x, f.y].join(',')
+            //     if (! locations) locations = new Set([f])
+            //     if (! locations.has(f)) {
+            //         locations.add(f)
+            //     }
+            //     featureMap[f.type] = locations
+            // })
+            // selectFeature(features[0])
+        }
     }
 }
 
