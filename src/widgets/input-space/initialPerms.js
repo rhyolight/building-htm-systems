@@ -41,7 +41,7 @@ module.exports = (elementId) => {
             return $('#hoverBox')
         }
 
-        function updatePermanences() {
+        function getRandomPerms() {
             let independentVariables = parseInt($independentVariablesSlider.val())
             let distributionCenter = parseInt($distributionCenterSlider.val()) / 100
             let selectedMiniColumn = jsds.get('selectedMiniColumn')
@@ -54,8 +54,8 @@ module.exports = (elementId) => {
                     } else {
                         return null
                     }
-                })
-            jsds.set('permanences', permanences)
+                }).filter(v => v !== null)
+            return permanences
         }
 
         function updatePercentConnectedDisplay() {
@@ -97,75 +97,64 @@ module.exports = (elementId) => {
                 $hoverBox.hide()
             })
             updatePercentConnectedDisplay()
-            drawHistogram(permanences)
+            drawHistogram()
         }
 
-        function drawHistogram(rawData) {
-            let formatCount = d3.format(",.0f");
-            let data = rawData.filter(d => d !== null)
-
+        function drawHistogram() {
+            let data = jsds.get('permanences')
             let svg = d3.select("svg#receptiveFieldHistogram")
-
-            svg.attr('transform', 'translate(0, -40)')
 
             let margin = {top: 10, right: 30, bottom: 30, left: 30},
                 width = +svg.attr("width") - margin.left - margin.right,
                 height = +svg.attr("height") - margin.top - margin.bottom
 
             let histGroup = svg.selectAll('g.hist')
-                .data([null])
 
             histGroup.enter().append('g')
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
                 .attr('class', 'hist')
 
             let x = d3.scaleLinear()
-                .rangeRound([0, width]);
+                .range([0, width]);
 
             let bins = d3.histogram()
                 .domain(x.domain())
-                .thresholds(x.ticks(40))
+                .thresholds(x.ticks(50))
                 (data);
 
+            let maxBins = d3.max(bins, function(d) { return d.length; })
             let y = d3.scaleLinear()
-                .domain([0, d3.max(bins, function(d) { return d.length; })])
-                .range([height, 0]);
+                .domain([0, maxBins])
+                .range([0, height]);
 
-            function treatBarGroups(barGroups) {
-                barGroups
-                    .attr("class", "bar")
-                    .attr("transform", function(d) {
-                        return "translate(" + x(d.x0) + "," + y(d.length) + ")"
+            function treatRects(rects) {
+                let rectWidth = x(bins[0].x1) - x(bins[0].x0)
+                rects
+                    .attr('class', 'bar')
+                    .attr('x', (d, i) => {
+                        return i * rectWidth
                     })
-
-                barGroups.selectAll('rect').data([null]).enter().append('rect')
-                    .attr("x", 1)
-                    .attr("width", x(bins[0].x1) - x(bins[0].x0) - 1)
-                    .attr("height", function(d) { return height - y(d.length); });
-
-                barGroups.selectAll('text').data([null]).enter().append('text')
-                    .attr("dy", ".75em")
-                    .attr("y", 6)
-                    .attr("x", (x(bins[0].x1) - x(bins[0].x0)) / 2)
-                    .attr("text-anchor", "middle")
-                    .text(function(d) { return formatCount(d.length); });
+                    .attr('y', (d, i) => {
+                        return y(maxBins - bins[i].length)
+                    })
+                    .attr('height', (d, i) => {
+                        return y(bins[i].length)
+                    })
+                    .attr('width', rectWidth)
+                    .attr('fill', 'steelblue')
             }
 
-            // Update bars
-            let barGroups = histGroup.selectAll(".bar")
-                .data(bins)
-            treatBarGroups(barGroups)
+            let rects = histGroup.selectAll('rect.bar').data(bins)
+            treatRects(rects)
 
-            // Enter bars
-            let newBarGroups = barGroups.enter().append('g')
-            treatBarGroups(newBarGroups)
+            let newRects = rects.enter().append('rect')
+            treatRects(newRects)
 
-            // Exit bars
-            barGroups.exit().remove()
+            rects.exit().remove()
 
             let connectionThreshold = parseInt($connectionThresholdSlider.val()) / 100
 
-            histGroup.append('line')
+            svg.select('line.threshold')
                 .attr('id', 'connectionThreshold')
                 .attr('x1', x(connectionThreshold))
                 .attr('x2', x(connectionThreshold))
@@ -174,7 +163,7 @@ module.exports = (elementId) => {
                 .attr('stroke', 'red')
                 .attr('stroke-width', 4)
 
-            histGroup.append("g")
+            histGroup.selectAll('g.axis').data([null]).enter().append('g')
                 .attr("class", "axis axis--x")
                 .attr("transform", "translate(0," + height + ")")
                 .call(d3.axisBottom(x));
@@ -182,7 +171,7 @@ module.exports = (elementId) => {
         }
 
         function redraw() {
-            updatePermanences()
+            jsds.set('permanences', getRandomPerms())
             updateDisplays()
         }
 
@@ -190,8 +179,9 @@ module.exports = (elementId) => {
         $independentVariablesSlider.on('input', redraw)
         $distributionCenterSlider.on('input', redraw)
 
-        jsds.after('set', 'selectedMiniColumn', redraw)
-        jsds.after('set', 'potentialPools', redraw)
+        jsds.after('set', 'selectedMiniColumn', updateDisplays)
+        jsds.after('set', 'potentialPools', updateDisplays)
+        jsds.after('set', 'permanences', updateDisplays)
 
         redraw()
 

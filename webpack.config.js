@@ -70,6 +70,7 @@ modules.push({
             JSDS: path.join(__dirname, "node_modules/javascript-data-store/src/jsds"),
             SdrUtils: path.join(__dirname, "node_modules/cell-viz/src/SdrUtils"),
             SdrDrawing: path.join(__dirname, "node_modules/cell-viz/src/SdrDrawing"),
+            RelativeScalarEncoder: path.join(__dirname, "node_modules/simplehtm/src/encoders/relativeScalar"),
         }
     },
     output: {
@@ -104,7 +105,7 @@ modules.push({
 
 // For Blogs
 
-// How Do Grid Cells Work?
+// How Grid Cells Map Space
 modules.push({
     mode: mode,
     entry: [
@@ -131,7 +132,7 @@ modules.push({
     },
     output: {
         path: __dirname + "/docs",
-        filename: `bhtms-how-do-grid-cells-work-${version}.js`
+        filename: `bhtms-how-grid-cells-map-space-${version}.js`
     }
 })
 
