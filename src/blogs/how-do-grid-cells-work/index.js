@@ -1,6 +1,5 @@
 let embed = require('./embed')
 
-
 window.BHTMS = {
     header: require('./header'),
     gridCellFiringFields: require('./firingFields'),
