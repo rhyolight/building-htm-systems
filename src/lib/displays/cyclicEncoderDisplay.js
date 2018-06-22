@@ -22,7 +22,7 @@ class CyclicEncoderDisplay {
             this.$svg = d3.select('#' + id)
         } else {
             this.$svg = id
-            id = '?'
+            id = this.$svg.attr('id') || '?'
         }
 
         this.id = id
@@ -35,17 +35,32 @@ class CyclicEncoderDisplay {
             this.jsds = JSDS.get('CyclicEncoderDisplay-' + this.id)
             if (! this.jsds) throw new Error('Cannot get JSDS!')
         }
-        this.jsds.set('resolution', opts.resolution)
-        this.jsds.set('n', opts.n)
-        this.jsds.set('w', opts.w)
 
         // State of display
         this.display = opts.display || 'circle'
         // this.display = 'line'
         this.encoder = new CyclicEncoder({
-            resolution: opts.resolution,
-            n: opts.n,
+            min: 0,
+            max: opts.categories.length * opts.w,
             w: opts.w,
+            n: opts.w * opts.categories.length,
+        })
+
+        this.jsds.set('categories', opts.categories)
+        this.jsds.set('w', opts.w)
+        this.jsds.set('n', this.encoder.n)
+
+        this.__selfUpdate()
+    }
+
+    __selfUpdate() {
+        let me = this
+        let jsds = this.jsds
+        jsds.after('set', 'value', (v) => {
+            jsds.set('encoding', me.encoder.encode(v))
+        })
+        jsds.after('set', 'encoding', (e) => {
+            me.updateDisplay()
         })
     }
 
@@ -53,9 +68,18 @@ class CyclicEncoderDisplay {
         return (this.size / 2) * this.largeCircleRatio
     }
 
+    set value(v) {
+        this.jsds.set('value', v)
+    }
+
+    get value() {
+        return this.jsds.get('value')
+    }
+
     render() {
         let jsds = this.jsds,
-            n = jsds.get('n'),
+            categories = jsds.get('categories'),
+            n = categories.length,
             w = jsds.get('w'),
             $svg = this.$svg,
             size = this.size,
@@ -142,10 +166,14 @@ class CyclicEncoderDisplay {
     }
 
     updateDisplay() {
+        let value = this.jsds.get('value')
+        if (! value) {
+            console.log('no value to display')
+            return
+        }
         let displayState = this.display
         let me = this
         let size = this.size
-        let value = this.jsds.get('value')
         let encoding = this.jsds.get('encoding') || this.encoder.encode(value)
         let maxRange = Math.floor(this.encoder.inputDomain[1])
         this.$valueDisplay.html(value + ' / ' + maxRange)
@@ -242,27 +270,27 @@ class CyclicEncoderDisplay {
         circles.exit().remove()
     }
 
-    step(increment) {
-        let v = this.jsds.get('value')
-        v += increment
-        if (v > this.jsds.get('values') - 1) v = 0
-        this.jsds.set('value', v)
-    }
-
-    loop() {
-        let me = this
-        if (! this.jsds.get('value')) this.jsds.set('value', 0)
-        this._loopHandle = setInterval(() => {
-            me.step(1)
-        }, 300)
-    }
-
-    stop() {
-        if (this._loopHandle) {
-            window.clearInterval(this._loopHandle)
-            delete this._loopHandle
-        }
-    }
+    // step(increment) {
+    //     let v = this.jsds.get('value')
+    //     v += increment
+    //     if (v >= this.jsds.get('n')) v = 0
+    //     this.jsds.set('value', v)
+    // }
+    //
+    // loop() {
+    //     let me = this
+    //     if (! this.jsds.get('value')) this.jsds.set('value', 0)
+    //     this._loopHandle = setInterval(() => {
+    //         me.step(1)
+    //     }, 300)
+    // }
+    //
+    // stop() {
+    //     if (this._loopHandle) {
+    //         window.clearInterval(this._loopHandle)
+    //         delete this._loopHandle
+    //     }
+    // }
 
 }
 

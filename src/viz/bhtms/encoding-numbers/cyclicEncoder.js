@@ -1,3 +1,4 @@
+let d3 = require('d3')
 let utils = require('../../../lib/utils')
 let html = require('./cyclicEncoder.tmpl.html')
 let dat = require('dat.gui')
@@ -96,7 +97,8 @@ module.exports = (elementId, config) => {
                 mouseX = Math.min(maxWidth - (valueScaleSideMargins * 2), mouseX)
                 mouseX = Math.max(0, mouseX)
                 value = utils.precisionRound(xToValue(mouseX), 1)
-                encoderDisplay.jsds.set('value', value)
+                console.log(value)
+                encoderDisplay.value = value
             })
         }
 
@@ -143,15 +145,18 @@ module.exports = (elementId, config) => {
                 size: width,
                 color: onColor,
                 w: uiValues.w,
-                n: uiValues.n,
-                resolution: uiValues.resolution,
+                categories: d3.range(0, uiValues.n),
                 display: uiValues.display,
             }, opts)
             encoderDisplay = new CyclicEncoderDisplay($bitsSvg, params)
         }
 
         function render() {
-            let value = encoderDisplay.jsds.get('value')
+            let value = encoderDisplay.value
+            if (! value) {
+                console.log('Skipping render() no value')
+                return
+            }
             let encoding = encoderDisplay.encoder.encode(value)
             setUpValueAxis(encoderDisplay.encoder.min, encoderDisplay.encoder.max, width)
             updateDisplays(encoding, value)
@@ -175,23 +180,30 @@ module.exports = (elementId, config) => {
 
         createEncoder()
         encoderDisplay.render()
+        encoderDisplay.value = (encoderDisplay.encoder.max - encoderDisplay.encoder.min)
+        encoderDisplay.jsds.after('set', 'value', (v) => {
+            updateValue(v)
+        })
         render()
 
-        // When a new value is set, update value bar
-        encoderDisplay.jsds.after('set', 'value', (value) => {
-            updateValue(value)
-            let encoding = encoderDisplay.encoder.encode(value)
-            encoderDisplay.jsds.set('encoding', encoding)
-        })
-        // When an encoding is set, update bits
-        encoderDisplay.jsds.after('set', 'encoding', (encoding) => {
-            updateOutputBits()
-        })
-
-        encoderDisplay.jsds.set(
-            'value',
-            (encoderDisplay.encoder.max - encoderDisplay.encoder.min) / 2
-        )
+        // encoderDisplay.render()
+        // render()
+        //
+        // // When a new value is set, update value bar
+        // encoderDisplay.jsds.after('set', 'value', (value) => {
+        //     updateValue(value)
+        //     let encoding = encoderDisplay.encoder.encode(value)
+        //     encoderDisplay.jsds.set('encoding', encoding)
+        // })
+        // // When an encoding is set, update bits
+        // encoderDisplay.jsds.after('set', 'encoding', (encoding) => {
+        //     updateOutputBits()
+        // })
+        //
+        // encoderDisplay.jsds.set(
+        //     'value',
+        //     (encoderDisplay.encoder.max - encoderDisplay.encoder.min) / 2
+        // )
 
 
     })
