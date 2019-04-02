@@ -69,10 +69,6 @@ Thousand Brains Theory of Intelligence:
 
           resources:
             Cortical Circuitry (HTM School): https://www.youtube.com/watch?v=mPFx9yuV1Os
-            # Thalamus Snubbed: https://numenta.com/blog/2018/08/29/thalamus-snubbed/
-
-          # dependencies:
-          #   - Layers
 
         HTM Neuron:
           desc: >
@@ -81,17 +77,11 @@ Thousand Brains Theory of Intelligence:
             Much of our research focuses around one fundamental observation: that the neocortex is constantly predicting its inputs. The <strong>HTM neuron</strong> is based on the idea that every pyramidal cell is a prediction machine. A single pyramidal neuron with active dendrites can recognize hundreds of unique patterns and contexts in which it can predict its input.
             </p>
 
-          # resources:
-          #   Why Neurons Have Thousands of Synapses, A Theory of Sequence Memory in Neocortex: https://numenta.com/neuroscience-research/research-publications/papers/why-neurons-have-thousands-of-synapses-theory-of-sequence-memory-in-neocortex/
-
         Minicolumns:
           desc: >
             <p>
             Minicolumns, also sometimes referred to as cortical columns, are the most basic unit of neural organization.  It is the building block of essential elements for cortical processing.
             </p>
-
-          # dependencies:
-          #   - HTM Neuron
 
           resources:
             Why Neurons Have Thousands of Synapses, A Theory of Sequence Memory in Neocortex (Research paper): https://numenta.com/neuroscience-research/research-publications/papers/why-neurons-have-thousands-of-synapses-theory-of-sequence-memory-in-neocortex/
@@ -102,10 +92,6 @@ Thousand Brains Theory of Intelligence:
             <p>
             A network incorporating such neurons can learn complex sequences in a surprisingly robust and flexible manner. The model learns in a completely unsupervised fashion and, as a continuously learning system, adapts rapidly to changes in its input.
             </p>
-
-          # dependencies:
-          #   - Minicolumns
-          #   - HTM Neuron
 
           resources:
             Why Neurons Have Thousands of Synapses, A Theory of Sequence Memory in Neocortex (Research paper): https://numenta.com/neuroscience-research/research-publications/papers/why-neurons-have-thousands-of-synapses-theory-of-sequence-memory-in-neocortex/

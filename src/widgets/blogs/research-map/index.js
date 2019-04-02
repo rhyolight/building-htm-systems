@@ -24,60 +24,7 @@ function isChildMap(node) {
 
 function toDomId(str) {
     return str.replace(/\s+/g, '_')
-              .replace(/\//g, '_')
-}
-
-function htmlOverlayNodeLoader(node, $el, selectedName, _name) {
-    // Read through hierarchy and create the HTML we need
-    // to support the overlay
-
-    let nodeName = node.name || _name || 'root'
-    let $header = $('<h3>')
-    let $content = $('<div>')
-    let id = toDomId(nodeName)
-
-    $header.attr('id', id)
-
-    if (isChildMap(node)) {
-        let childNames = Object.keys(node)
-        let $ul = $('<ul id="' + id + '" class="accordion">')
-        childNames.forEach(name => {
-            $ul.append(htmlOverlayNodeLoader(node[name], $('<li>'), selectedName, name))
-        })
-        $content.append($ul)
-    } else {
-
-        if (node.children) {
-            htmlOverlayNodeLoader(node.children, $content, selectedName, nodeName)
-        }
-
-        if (nodeName !== 'root') {
-            let $a = $('<a href="#">')
-            $a.addClass('trigger')
-            $a.data('triggers', nodeName)
-            $a.html(nodeName)
-            $header.html($a)
-        }
-    }
-
-    $el.append([$header, $content])
-
-    return $el
-}
-
-function updateImageSizes($el) {
-    $el.find('img').each((i, img) => {
-        let $img = $(img)
-        let h = $img.height()
-        let w = $img.width()
-        if (h > 0 && w > 0) {
-            console.log('found image: %s', $img.attr('src'))
-        }
-        if (h > w) {
-            $img.addClass('half')
-        }
-        $img.show()
-    })
+        .replace(/\//g, '_')
 }
 
 function htmlAccordionNodeLoader(node, $el, _name) {
@@ -97,8 +44,6 @@ function htmlAccordionNodeLoader(node, $el, _name) {
         })
         $content.append($ul)
     } else {
-
-        $content.append($('<a class="overlay-trigger" href="#">Navigate</a>'))
 
         $content.attr('id', id)
         if (node.desc) {
@@ -125,24 +70,10 @@ function htmlAccordionNodeLoader(node, $el, _name) {
                 $content.append($res)
             }
 
-            if (node.dependencies) {
-                let $deps = $('<ul>')
-                node.dependencies.forEach(depName => {
-                    let $li = $('<li>')
-                    let $link = $('<a href="#">')
-                    $link.addClass('trigger')
-                    $link.data('triggers', depName)
-                    $link.html(depName)
-                    $li.append($link)
-                    $deps.append($li)
-                })
-                $content.append('<h4>Related Topics')
-                $content.append($deps)
-            }
         }
 
         $header.html(nodeName)
-        $header.attr('id', toDomId(nodeName) + '_accordion')
+        $header.data('nodeName', nodeName)
     }
 
     $el.append([$header, $content])
@@ -182,75 +113,15 @@ function getMapAncestors(m, target, _crumbs, _name) {
     return out
 }
 
-function isAccordionOpen($a) {
-    return $a.hasClass('ui-state-active')
-}
-
-function closeAccordion($a) {
-    if (isAccordionOpen($a)) {
-        $a.click()
-    }
-}
-
-function closeAllOpen() {
-    open.reverse().forEach(id => {
-        let $a = $('#' + id + '_accordion')
-        closeAccordion($a)
-    })
-    open = []
-}
-
-function showOverlay($trigger) {
-    let $accordion = $('.accordion-map')
-    // Get position of accordion and place overlay over top of it.
-    let topLeft = getOffset($accordion.get(0))
-    let parentWidth = $accordion.width()
-    let padPercent = .05
-    let width = parentWidth * (1.0 - padPercent)
-    let padding = (parentWidth - width) / 2
-    // Highlight the current location in the overlay
-    $overlay.find('.selected').removeClass('selected')
-    $overlay.find('#' + selectedTopicId).addClass('selected')
-    $overlay.width(width)
-    $overlay.css({
-      left: topLeft.left + padding,
-      top: getOffset($trigger.get(0)).top,
-    })
-    $overlay.show('fast')
-    $accordion.fadeTo('fast', 0.5)
-}
-
 function render($topEl) {
     let $accordion = htmlAccordionNodeLoader(
         researchMap, $topEl.find('.accordion-map')
     )
 
-    $overlay = htmlOverlayNodeLoader(
-        researchMap, $('#overlay-map')
-    )
-
-    let accordionOpened = function(evt) {
-        updateImageSizes($accordion)
-        let targetId = evt.target.id
-        console.log(`accordion opened: ${targetId}`)
-
-        if (selectedTopicId === targetId) {
-            console.log(`scrolling to ${selectedTopicId}...`)
-            $([document.documentElement, document.body]).animate({
-                scrollTop: $('#' + selectedTopicId).offset().top - 40
-            }, 1000, () => {
-                console.log(`done scrolling, deleting ${selectedTopicId}...`)
-                selectedTopicId = undefined
-            });
-        }
-
-    }
-
     $accordion.find("ul.accordion").accordion({
         collapsible: true,
         active: false,
         heightStyle: "content",
-        activate: accordionOpened,
     });
 
     // This opens the main accordion
@@ -262,46 +133,17 @@ function render($topEl) {
 
     $topEl.click(evt => {
         let $target = $(evt.target)
-        // If navigation click
-        $('#overlay-map').hide('fast')
-        $('.accordion-map').fadeTo('fast', 1.0)
-
-        console.log($target)
-
-        if ($target.hasClass('trigger')) {
-            // This applies only to the navigation overlay.
-            // Navigation happens here on clicks.
-            let targetName = $target.data('triggers')
-            let targetId = toDomId(targetName)
-            // Set this global state
-            selectedTopicId = targetId
-            evt.stopPropagation()
-            evt.preventDefault()
-            closeAllOpen()
-            let ancestors = getMapAncestors(researchMap, targetName)
-            let ancestorIds = ancestors.map(toDomId)
-            ancestorIds.forEach(id => {
-                $('#' + id + '_accordion').click()
-                open.push(id)
-            })
-        } else {
-            // This applies to manual clicking anywhere over the accordion space
-            if ($target.hasClass('ui-accordion-header')) {
-                let parts = $target.attr('id').split('_')
-                let id = parts.slice(0, parts.length - 1).join('_')
-                // Set this global state
-                selectedTopicId = id
+        if ($target.hasClass('ui-accordion-header')) {
+            let nodeName = $target.data('nodeName')
+            if (! $target.hasClass('ui-state-active')) {
+                // this was just de-selected, so we'll select the parent
+                let ancestors = getMapAncestors(researchMap, nodeName)
+                selectedTopicId = toDomId(ancestors[ancestors.length - 2])
+            } else {
+                selectedTopicId = toDomId(nodeName)
             }
+            console.log(`selectedTopic: ${selectedTopicId}`)
         }
-
-        // If overlay trigger
-        if ($target.hasClass('overlay-trigger')) {
-            evt.stopPropagation()
-            evt.preventDefault()
-            showOverlay($target)
-        }
-
-        console.log(`selectedTopic: ${selectedTopicId}`)
     })
 }
 
