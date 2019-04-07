@@ -25,7 +25,7 @@ Thousand Brains Theory of Intelligence:
 
     Local Computations / Parallel Voting:
       desc: >
-        <img src="img/parallel-voting.png" />
+        <img src="img/parallel-voting.png" class="half"/>
         <p>
         In the Thousand Brains Theory, each cortical column creates complete models of its world, based on what it can sense as its associated sensor moves. Columns combine sensory input with a grid cell-derived location, and then integrate those “sensory features at locations” over movements. Long-range connections in the cortex allow columns to vote and this parallel voting leads to a consensus of what they the columns are sensing.
         </p>
@@ -36,7 +36,7 @@ Thousand Brains Theory of Intelligence:
 
     Common Cortical Circuit:
       desc: >
-        <img src="img/cortical-circuit.png" />
+        <img src="img/cortical-circuit.png" class="half" />
         <p>
         The neocortex is complex. It contains dozens of cell types, numerous layers, and intricate connectivity patterns. The connections between cells suggest a columnar flow of information across layers as well as a laminar flow within some layers. Fortunately, this complex circuitry is remarkably preserved in all regions. Vernon Mountcastle was the first to propose that a canonical circuit consisting of cortical columns underlies everything the neocortex does. The way we see, feel, hear, move, and even do high level planning runs on this same common cortical circuit.
         </p>
@@ -52,7 +52,7 @@ Thousand Brains Theory of Intelligence:
 
         Layers:
           desc: >
-            <img src="img/layers.png" />
+            <img src="img/layers.png"  class="half"/>
             <p>
             While neuroscience textbooks generally list 6 <strong>layers</strong> in the neocortex, scientists now believe there are more, with dozens of different cell types.  Our work involves figuring out what each layer is doing and how it fits into the common cortical circuit.
             </p>
@@ -62,7 +62,7 @@ Thousand Brains Theory of Intelligence:
 
         Connections Between Layers:
           desc: >
-            <img src="img/connections-between-layers.png" />
+            <img src="img/connections-between-layers.png"  class="half"/>
             <p>
             As part of the common cortical circuit, the layers relate to each other in specific ways. Through our research, we are mapping out these connections.
             </p>
