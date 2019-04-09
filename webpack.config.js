@@ -305,11 +305,6 @@ modules.push({
     node: {
         fs: 'empty'
     },
-    resolve: {
-        alias: {
-            JSDS: path.join(__dirname, 'node_modules/javascript-data-store/src/jsds'),
-        }
-    },
     output: {
         path: __dirname + '/blogs',
         filename: `research-map-${version}.js`
