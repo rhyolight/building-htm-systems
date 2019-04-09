@@ -39,7 +39,7 @@ Thousand Brains Theory of Intelligence:
 
     Common Cortical Circuit:
       desc: >
-        <img src="images/cortical-circuit.png" />
+        <img src="images/cortical-circuit.png" class="half"/>
         <p>
         The neocortex is complex. It contains dozens of cell types, numerous layers, and intricate connectivity patterns. The connections between cells suggest a columnar flow of information across layers as well as a laminar flow within some layers. Fortunately, this complex circuitry is remarkably preserved in all regions. Vernon Mountcastle was the first to propose that a canonical circuit consisting of cortical columns underlies everything the neocortex does. The way we see, feel, hear, move, and even do high level planning runs on this same common cortical circuit.
         </p>
@@ -50,32 +50,33 @@ Thousand Brains Theory of Intelligence:
 
       resources:
         Cortical Circuitry (HTM School): https://www.youtube.com/watch?v=mPFx9yuV1Os
+        Key Discoveries in Understanding How the Brain Works (video): https://www.youtube.com/watch?v=X50GY0mdHlw
 
       children:
 
         Layers:
           desc: >
-            <img src="images/layers.png" />
+            <img src="images/layers.png" class="third"/>
             <p>
             While neuroscience textbooks generally list 6 <strong>layers</strong> in the neocortex, scientists now believe there are more, with dozens of different cell types.  Our work involves figuring out what each layer is doing and how it fits into the common cortical circuit.
             </p>
 
           resources:
+            Key Discoveries in Understanding How the Brain Works (video): https://www.youtube.com/watch?v=X50GY0mdHlw
             Cortical Circuitry (HTM School): https://www.youtube.com/watch?v=mPFx9yuV1Os
 
         Connections Between Layers:
           desc: >
-            <img src="images/connections-between-layers.png" />
+            <img src="images/connections-between-layers.png" class="third"/>
             <p>
             As part of the common cortical circuit, the layers relate to each other in specific ways. Through our research, we are mapping out these connections.
             </p>
 
           resources:
+            A Theory of How Columns in the Neocortex Enable Learning the Structure of the World (Research paper): https://numenta.com/neuroscience-research/research-publications/papers/a-theory-of-how-columns-in-the-neocortex-enable-learning-the-structure-of-the-world/
+            "Screencast: Jeff Hawkins - Human Brain Project Summit (video and presentation)": https://numenta.com/resources/videos/jeff-hawkins-human-brain-project-screencast/
+            A mechanism for sensorimotor object recognition using cortical grid cells (Research poster): https://numenta.com/neuroscience-research/research-publications/posters/sfn-2018-sensorimotor-object-recognition-using-grid-cells/
             Cortical Circuitry (HTM School): https://www.youtube.com/watch?v=mPFx9yuV1Os
-            # Thalamus Snubbed: https://numenta.com/blog/2018/08/29/thalamus-snubbed/
-
-          # dependencies:
-          #   - Layers
 
         HTM Neuron:
           desc: >
@@ -84,20 +85,15 @@ Thousand Brains Theory of Intelligence:
             Much of our research focuses around one fundamental observation: that the neocortex is constantly predicting its inputs. The <strong>HTM neuron</strong> is based on the idea that every pyramidal cell is a prediction machine. A single pyramidal neuron with active dendrites can recognize hundreds of unique patterns and contexts in which it can predict its input.
             </p>
 
-          # resources:
-          #   Why Neurons Have Thousands of Synapses, A Theory of Sequence Memory in Neocortex: https://numenta.com/neuroscience-research/research-publications/papers/why-neurons-have-thousands-of-synapses-theory-of-sequence-memory-in-neocortex/
-
         Minicolumns:
           desc: >
             <p>
             Minicolumns, also sometimes referred to as cortical columns, are the most basic unit of neural organization.  It is the building block of essential elements for cortical processing.
             </p>
 
-          # dependencies:
-          #   - HTM Neuron
-
           resources:
             Why Neurons Have Thousands of Synapses, A Theory of Sequence Memory in Neocortex (Research paper): https://numenta.com/neuroscience-research/research-publications/papers/why-neurons-have-thousands-of-synapses-theory-of-sequence-memory-in-neocortex/
+            The predictive neuron, how active dendrites enable spatiotemporal computation in the neocortex (Research poster): https://numenta.com/neuroscience-research/research-publications/posters/sfn-2018-the-predictive-neuron/
 
         Sequence Memory:
           desc: >
@@ -106,12 +102,10 @@ Thousand Brains Theory of Intelligence:
             A network incorporating such neurons can learn complex sequences in a surprisingly robust and flexible manner. The model learns in a completely unsupervised fashion and, as a continuously learning system, adapts rapidly to changes in its input.
             </p>
 
-          # dependencies:
-          #   - Minicolumns
-          #   - HTM Neuron
-
           resources:
             Why Neurons Have Thousands of Synapses, A Theory of Sequence Memory in Neocortex (Research paper): https://numenta.com/neuroscience-research/research-publications/papers/why-neurons-have-thousands-of-synapses-theory-of-sequence-memory-in-neocortex/
+            "HTM School: Temporal Memory Part 1 (video)": https://www.youtube.com/watch?v=UBzemKcUoOk
+
 
     Complete Object Modeling:
       desc: ""
@@ -140,6 +134,7 @@ Thousand Brains Theory of Intelligence:
             A Framework for Intelligence and Cortical Function Based on Grid Cells in the Neocortex (Research paper): https://numenta.com/neuroscience-research/research-publications/papers/a-framework-for-intelligence-and-cortical-function-based-on-grid-cells-in-the-neocortex/
             Locations in the Neocortex: A Theory of Sensorimotor Object Recognition Using Cortical Grid Cells (Research paper): https://numenta.com/neuroscience-research/research-publications/papers/locations-in-the-neocortex-a-theory-of-sensorimotor-object-recognition-using-cortical-grid-cells/
             Grid Cells (HTM School Episode): https://www.youtube.com/watch?v=mP7neeymcUY
+            "SfN 2018: Grid Cells in the Neocortex, a Framework for Cortical Computation (Research poster)": https://numenta.com/neuroscience-research/research-publications/posters/sfn-2018-grid-cells-in-the-neocortex-a-framework-for-cortical-computation/
 
         Displacement Cells:
           desc: >
@@ -151,6 +146,7 @@ Thousand Brains Theory of Intelligence:
           resources:
             A Framework for Intelligence and Cortical Function Based on Grid Cells in the Neocortex (Research paper): https://numenta.com/neuroscience-research/research-publications/papers/a-framework-for-intelligence-and-cortical-function-based-on-grid-cells-in-the-neocortex/
             Locations in the Neocortex: A Theory of Sensorimotor Object Recognition Using Cortical Grid Cells (Research paper): https://numenta.com/neuroscience-research/research-publications/papers/locations-in-the-neocortex-a-theory-of-sensorimotor-object-recognition-using-cortical-grid-cells/
+            Unsupervised Learning of Relative Landmark Locations Using Grid Cells (Research poster): https://numenta.com/neuroscience-research/research-publications/posters/unsupervised-learning-relative-landmark-locations-using-grid-cells/
 
         Object Compositionality:
           desc: >
