@@ -1,0 +1,1 @@
+console.log 'This is a coffeescript example. Parcel.js automatically compiles it on build/run'

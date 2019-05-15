@@ -1,12 +1,3 @@
-import Layout from '../components/Layout.js'
+console.log('this is an example file, it runs whenever the index.html page is loaded because the HTML page includes it')
 
 
-const Index = () => (
-  <div>
-    <Layout>
-      <h1>Building HTM Systems</h1>
-    </Layout>
-  </div>
-)
-
-export default Index

@@ -3,9 +3,8 @@
   "version": "0.2.15",
   "description": "Supporting code for Building HTM Systems document.",
   "scripts": {
-    "dev": "next",
-    "build": "next build",
-    "start": "next start"
+    "start": "nodemon index.js",
+    "clean": "rm -r .cache .dist"
   },
   "author": "matt@numenta.org",
   "license": "AGPL-3.0",
@@ -13,12 +12,11 @@
     "d3": "^5.9.2",
     "dat.gui": "^0.7.2",
     "moment": "^2.22.2",
-    "next": "^8.0.4",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-syntax-highlighter": "^10.2.1",
-    "react-latex": "^1.2.0",
     "simplehtm": "0.1.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "coffeescript": "^2.4.1",
+    "nodemon": "^1.19.0",
+    "parcel": "^1.12.3"
+  }
 }

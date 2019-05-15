@@ -1,0 +1,11 @@
+/* Header style */
+#header {
+    margin: 20;
+    padding: 20;
+    border: 1px solid #DDD;
+    font-family: Verdana;
+}
+/* Link style */
+#header a {
+    margin-right: 15
+}
