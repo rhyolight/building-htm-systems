@@ -7,3 +7,4 @@ node_modules/
 save-commands.json
 .cache
 .dist
+package-lock.json

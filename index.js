@@ -10,7 +10,7 @@ const compiledFolder = '.dist'
 app.use(express.static(compiledFolder))
 
 // Create a bundler
-let bundler = new Bundler("./pages/*.html", {
+let bundler = new Bundler(sourceCode, {
     // for all options see https://parceljs.org/api.html
     outDir: compiledFolder
 })
