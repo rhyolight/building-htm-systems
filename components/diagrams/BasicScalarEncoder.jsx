@@ -220,7 +220,7 @@ class BasicScalarEncoder extends React.Component {
 	}
 
 	handleNumberLineHover = (e) => {
-		const { min, max } = this.props
+		const { min, max, onValueChanged } = this.props
 		const lineX = e.pageX - sideGutter
 		this.value = precisionRound(this.screenToVal(lineX), 1)
 		
@@ -230,6 +230,7 @@ class BasicScalarEncoder extends React.Component {
 			this.encoding = this.encoder.encode(this.value )
 			this.renderValueMarker()
 			this.renderOutputCells()
+			if(onValueChanged) onValueChanged(this.value)
 		}
 	}
 
@@ -271,6 +272,7 @@ BasicScalarEncoder.propTypes = {
 	w: PropTypes.number.isRequired,
 	n: PropTypes.number.isRequired,
 	diagramWidth: PropTypes.number.isRequired,
+	onValueChanged: PropTypes.func,
 }
 
 export default BasicScalarEncoder

@@ -117,6 +117,7 @@ class EncodingNumbers extends React.Component {
   	max: 100,
   	min: 0,
   	n: 100,
+  	value: 27.5,
   	w: 10,
   }
 
@@ -127,6 +128,7 @@ class EncodingNumbers extends React.Component {
   	const ParameterMin = <NumberValue name="param-min" value={this.state.min} onUpdate={value => this.setState({min: Number(value)})} />
   	const ParameterN = <NumberValue name="param-n" value={this.state.n} onUpdate={value => this.setState({n: Number(value)})} />
   	const ParameterW = <NumberValue name="param-w" value={this.state.w} onUpdate={value => this.setState({w: Number(value)})} />
+  	const ParameterValue = <NumberValue name="param-value3" value={this.state.value} onUpdate={value => this.setState({value: Number(value)})} />
 
   	return (
   		<div>
@@ -135,6 +137,7 @@ class EncodingNumbers extends React.Component {
 					max:{ParameterMax} ---
 					n:{ParameterN} ---
 					w:{ParameterW} ---
+					value:{ParameterValue} ---
 					
   				<br />
 
@@ -144,7 +147,18 @@ class EncodingNumbers extends React.Component {
   					max={this.state.max}
   					min={this.state.min} 
   					n={this.state.n}
-  					val={27.5}
+  					val={this.state.value}
+  					w={this.state.w}
+  					onValueChanged={value => this.setState({value: Number(value)})}
+  				/>
+  				<br />
+  				<BasicScalarEncoder 
+  					id="removeme2" 
+  					diagramWidth={500}
+  					max={this.state.max}
+  					min={this.state.min} 
+  					n={this.state.n}
+  					val={this.state.value}
   					w={this.state.w}
   				/>
   			</div>
