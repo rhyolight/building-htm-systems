@@ -13,13 +13,22 @@ class Player extends Component {
 		}
 	}
 
-	handlePlayerClick = () => {
-		if (!this.state.playing) {
-			this.setState({ playing: true })
-		} else {
-			this.setState({ playing: false })
+	componentDidMount() {
+		window.addEventListener('keydown', this.handleKey);
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener('keydown', this.handleKey);
+	}
+
+	handleKey = e => {
+		if(e.keyCode === 80) {
+			this.handlePlayerClick();
 		}
-		this.props.onUpdate(this.state.playing)
+	}
+
+	handlePlayerClick = () => {
+		this.setState({ playing: !this.state.playing }, () => this.props.onUpdate(this.state.playing))
 	}
 
 	render() {
