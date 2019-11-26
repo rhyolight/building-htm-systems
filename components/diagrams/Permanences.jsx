@@ -105,7 +105,7 @@ class Permanences extends React.Component {
 		const selectedMinicolumn = this.props.selectedMinicolumn
 		const pools = this.props.potentialPools[selectedMinicolumn]
 
-		function treatCells(cell) {
+		function treatCells(cell, label) {
 			cell.attr('class', 'bit')
 				.attr('fill', (d) => {
 					let fill = offColor
@@ -122,22 +122,44 @@ class Permanences extends React.Component {
 				.attr('y', (d, i) => {
 					return (Math.floor(pools[i] / cols)) * cellWidth
 				})
+        .attr('data-index', (d, i) => i)
 				.attr('width', cellWidth)
-				.attr('height', cellWidth)
-		}
+        .attr('height', cellWidth)
+      label
+				.attr('x', (d, i) => {
+					return (pools[i] % cols) * cellWidth
+				})
+				.attr('y', (d, i) => {
+					return (Math.floor(pools[i] / cols)) * cellWidth + cellWidth
+				})
+        .attr('data-index', (d, i) => i)
+				.attr('font-size', cellWidth * .65)
+				.attr('font-weight', 'light')
+        .text((d, i) => {
+          let fixed = d.toFixed(2)
+          let str = "" + fixed
+          return "." + str.split(".")[1]
+        })
+        .attr('display', 'none')
+    }
 
 		// Update
 		const rects = g.selectAll('rect').data(
 			this.props.permanences[selectedMinicolumn]
-		)
-		treatCells(rects)
+    )
+    const labels = g.selectAll('text').data(
+			this.props.permanences[selectedMinicolumn]
+    )
+		treatCells(rects, labels)
 
 		// Enter
-		const newRects = rects.enter().append('rect')
-		treatCells(newRects)
+    const newRects = rects.enter().append('rect')
+    const newLabels = labels.enter().append('text')
+		treatCells(newRects, newLabels)
 
 		// Exit
-		rects.exit().remove()
+    rects.exit().remove()
+    labels.exit().remove()
 	}
 
 	renderConnections() {
@@ -249,7 +271,7 @@ class Permanences extends React.Component {
 				})
 				.attr('height', (d, i) => {
 					return y(bins[i].length)
-				})
+        })
 				.attr('width', rectWidth)
 				.attr('fill', 'steelblue')
 		}
@@ -281,11 +303,22 @@ class Permanences extends React.Component {
 	}
 
 
-	// Triggers inconsistently!!
 	selectMinicolumn(e) {
 		const selectedMinicolumn = Number(e.target.getAttribute('data-index'))
 		this.props.onUpdate(selectedMinicolumn)
-	}
+  }
+  
+  selectInputIndex(e) {
+    this.selectedIndex = Number(e.target.getAttribute('data-index'))
+
+    // const perm = this.props.permanences[selectedMinicolumn][selectedIndex]
+    // const diagramWidth = this.props.diagramWidth - diagramPadding * 2
+		// const cols = Math.floor(Math.sqrt(this.props.encoding.length))
+    // const cellWidth = diagramWidth / cols / 2
+  }
+  deselectInputIndex() {
+    this.selectedIndex = undefined
+  }
 
 	render() {
 
@@ -295,12 +328,17 @@ class Permanences extends React.Component {
 
 				<g className="minicolumns" onClick={e => this.selectMinicolumn(e)}></g>
 
-				<g className="input-space">
+        <g className="input-space"
+          onMouseOver={e => this.selectInputIndex(e)}
+          onMouseOut={e => this.deselectInputIndex()}
+        >
 					<g className="input"></g>
 					<g className="permanences"></g>
-					<g className="connections"></g>
+          <g className="connections"></g>
 				</g>
 
+        <text className="perm-label"></text>
+        
 				<g className="histogram">
 					<line className="threshold" />
 					<g className="axis" />
